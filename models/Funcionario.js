@@ -94,3 +94,4 @@ const Funcionario = sequelize.define('Funcionario', {
 
 module.exports = Funcionario;
 
+

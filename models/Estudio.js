@@ -53,3 +53,4 @@ const Estudio = sequelize.define('Estudio', {
 
 module.exports = Estudio;
 
+

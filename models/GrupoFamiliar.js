@@ -58,3 +58,4 @@ const GrupoFamiliar = sequelize.define('GrupoFamiliar', {
 
 module.exports = GrupoFamiliar;
 
+
