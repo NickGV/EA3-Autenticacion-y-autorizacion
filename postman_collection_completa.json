@@ -1,0 +1,353 @@
+{
+	"info": {
+		"_postman_id": "api-talento-humano-completo",
+		"name": "API Talento Humano - Completa",
+		"description": "Colección completa con autenticación, usuarios y funcionarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Autenticación",
+			"item": [
+				{
+					"name": "Login - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"token\", jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"correo\": \"admin@sistema.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Usuario Actual",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Usuarios",
+			"item": [
+				{
+					"name": "Registrar Usuario Gestor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Pedro Gestor\",\n  \"correo\": \"gestor@sistema.com\",\n  \"password\": \"gestor123\",\n  \"rol\": \"gestor\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/usuarios/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "usuarios", "register"]
+						}
+					}
+				},
+				{
+					"name": "Listar Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/usuarios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "usuarios"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Funcionarios",
+			"item": [
+				{
+					"name": "Listar Funcionarios",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios"]
+						},
+						"description": "Obtiene todos los funcionarios con sus familiares y estudios"
+					}
+				},
+				{
+					"name": "Obtener Funcionario por ID",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1"]
+						}
+					}
+				},
+				{
+					"name": "Crear Funcionario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tipo_identificacion\": \"CC\",\n  \"numero_identificacion\": \"1008888888\",\n  \"nombres\": \"Laura\",\n  \"apellidos\": \"Rodríguez Torres\",\n  \"estado_civil\": \"Soltera\",\n  \"sexo\": \"F\",\n  \"direccion\": \"Calle 80 #25-40\",\n  \"telefono\": \"3157778899\",\n  \"fecha_nacimiento\": \"1995-07-20\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Funcionario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"telefono\": \"3001112233\",\n  \"direccion\": \"Nueva Dirección Calle 50 #10-20\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Funcionario",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/3",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "3"]
+						},
+						"description": "Solo ADMIN - Elimina el funcionario y sus relaciones (CASCADE)"
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Grupo Familiar",
+			"item": [
+				{
+					"name": "Listar Familiares de Funcionario",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1/familiares",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1", "familiares"]
+						}
+					}
+				},
+				{
+					"name": "Agregar Familiar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Pedro López\",\n  \"parentesco\": \"Padre\",\n  \"edad\": 58,\n  \"telefono\": \"3009991122\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1/familiares",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1", "familiares"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Familiar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"telefono\": \"3001234567\",\n  \"edad\": 56\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/familiares/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "familiares", "1"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Familiar",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/familiares/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "familiares", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Estudios",
+			"item": [
+				{
+					"name": "Listar Estudios de Funcionario",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1/estudios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1", "estudios"]
+						}
+					}
+				},
+				{
+					"name": "Agregar Estudio",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"universidad\": \"Universidad de Medellín\",\n  \"nivel_estudio\": \"Especialización\",\n  \"titulo\": \"Seguridad Informática\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios/1/estudios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios", "1", "estudios"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Estudio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nivel_estudio\": \"Maestría\",\n  \"titulo\": \"Maestría en Seguridad Informática\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/estudios/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "estudios", "1"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Estudio",
+					"request": {
+						"method": "DELETE",
+						"header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+						"url": {
+							"raw": "{{base_url}}/api/estudios/2",
+							"host": ["{{base_url}}"],
+							"path": ["api", "estudios", "2"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Pruebas de Autorización",
+			"item": [
+				{
+					"name": "Acceder sin Token (Error)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios"]
+						},
+						"description": "Debe retornar 401 - No se proporcionó token"
+					}
+				},
+				{
+					"name": "Usuario sin permisos crear funcionario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{token_user}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tipo_identificacion\": \"CC\",\n  \"numero_identificacion\": \"1009999999\",\n  \"nombres\": \"Test\",\n  \"apellidos\": \"Test\",\n  \"sexo\": \"M\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/funcionarios",
+							"host": ["{{base_url}}"],
+							"path": ["api", "funcionarios"]
+						},
+						"description": "USER no puede crear - solo ADMIN y GESTOR"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}
+
